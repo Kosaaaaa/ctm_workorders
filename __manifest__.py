@@ -3,11 +3,11 @@
     'name': "ctm_workorders",
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+       Add feauture to work orders to run indepentent from others.
+       """,
 
     'description': """
-        Long description of module's purpose
+        Add feauture to work orders to run indepentent from others.
     """,
 
     'author': "My Company",
@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['mrp'],
 
     # always loaded
     'data': [
@@ -32,4 +32,7 @@
     'demo': [
         'demo/demo.xml',
     ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
 }
