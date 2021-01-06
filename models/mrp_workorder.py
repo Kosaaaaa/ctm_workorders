@@ -8,6 +8,13 @@ from odoo.tools import format_datetime
 class MrpWorkorder(models.Model):
     _inherit = 'mrp.workorder'
 
+    @api.onchange('is_parallel_work')
+    def _onchange_parallel_work(self):
+        if self.is_parallel_work and self.state == 'pending':
+            self.state = 'ready'
+        elif not self.is_parallel_work and self.state == 'ready':
+            self.state = 'pending'
+
     is_parallel_work = fields.Boolean(default=False)
 
     def _action_confirm(self):
@@ -53,12 +60,14 @@ class MrpWorkorder(models.Model):
                     })
 
             for workorders in workorders_by_bom.values():
+                for workorder in workorders:
+                    if workorder.is_parallel_work and workorder.state == 'pending':
+                        workorder.state = 'ready'
+                    elif not workorder.is_parallel_work and workorder.state == 'ready':
+                        workorder.state = 'pending'
+                    workorder._start_nextworkorder()
                 if workorders[0].state == 'pending':
                     workorders[0].state = 'ready'
-                for workorder in workorders:
-                    if workorder.is_parallel_work is True and workorder.state == 'pending':
-                        workorder.state = 'ready'
-                    workorder._start_nextworkorder()
 
     # TODO: WHY IT DOES NOT WORK
     # def _get_conflicted_workorder_ids(self):
