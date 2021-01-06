@@ -6,5 +6,4 @@ from odoo import models, fields, api
 class MrpWorkorder(models.Model):
     _inherit = 'mrp.workorder'
 
-    is_independent = fields.Boolean(default=False)
-
+    is_parallel_work = fields.Boolean(default=False)
